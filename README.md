@@ -2,6 +2,8 @@
 
 **Licence:** MIT (You probbably won't use is, but if you do, the license is negotiable)
 
+**Time spent:** ~7,5 hours
+
 # 🇳🇱 sudoku-oplosser
 Dit is een hobby-project om sudoku's op te lossen. Ik doe dit project omdat ik me verveel. Het kan 5-sterren sudoku's oplossen. Mocht je een Sudoku vinden die niet opgelost kan worden door deze applicatie, maak een issue aan. Ik ben benieuwd waar het aan ligt. De source code van dit project is in het Nederlands.
 
