@@ -10,6 +10,8 @@ public class Main {
 
         List<Cell> alleCellen = ReadSudokuFile.leesSudoku("sudoku.txt");
 
+        SudokuOplosser oplosser = new SudokuOplosser(alleCellen);
+
         System.out.println("Programma afgelopen.");
 
     }
