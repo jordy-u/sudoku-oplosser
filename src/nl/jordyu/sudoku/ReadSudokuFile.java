@@ -37,7 +37,7 @@ public class ReadSudokuFile {
         // Tekstregel splitten met tabs.
         // bron: https://javarevisited.blogspot.com/2017/01/how-to-split-string-based-on-delimiter-in-java.html#axzz6jA1dze6F
         for (String tekstRegel : tekstRegels) {
-            String[] celWaardesInRij = tekstRegel.split("\t");
+            String[] celWaardesInRij = tekstRegel.split("\t", 9);
 
             for (String celWaarde : celWaardesInRij) {
                 if (!celWaarde.isEmpty())
