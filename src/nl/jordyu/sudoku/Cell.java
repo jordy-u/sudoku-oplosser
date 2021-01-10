@@ -25,15 +25,27 @@ public class Cell {
     // Haal een kandidaatgetal weg.
     // Dit gebeurt als dit getal voorkomt in een rij, kolom of 3x3blok.
     // Returnvale: TRUE als deze cell maar 1 mogelijkheid over heeft.
-    public boolean haalKandidaatAntwoordWeg(int kandidaatAntwoord) {
+    public void haalKandidaatAntwoordWeg(int kandidaatAntwoord) {
         if (kandidaatAntwoorden[kandidaatAntwoord]) {
             kandidaatAntwoorden[kandidaatAntwoord] = false;
             aantalKandidaatGetallen--;
-            //todo: Zorg ervoor dat gerapporteerd wordt dat de andere cellen kun kandidaten moeten bijstellen.
 
-            return aantalKandidaatGetallen == 1;
+            if (aantalKandidaatGetallen == 1) {
+                setAntwoord(getEnigeKandidaatAntwoord());
+            }
         }
-        return false;
+    }
+
+    private int getEnigeKandidaatAntwoord() {
+        for (int i=1; i<10; i++) {
+            if (kandidaatAntwoorden[i]) return i;
+        }
+        throw new RuntimeException("Geen enkel kandidaat-antwoord mogelijk of cell heeft al een antwoord.");
+    }
+
+    //Verwijder kandidaat-antwoorden bij omliggende cellen.
+    public void updateGroepen() {
+        cellGroepen.forEach((soort, groep) -> groep.verwijderKandidaatGetal(antwoord));
     }
 
     // Getters en Setters.
@@ -60,9 +72,6 @@ public class Cell {
         Arrays.fill(kandidaatAntwoorden, false);
         aantalKandidaatGetallen = 0;
 
-        //Verwijder kandidaatgetallen bij omliggende cellen.
-        cellGroepen.forEach((soort, groep) -> {
-            groep.verwijderKandidaatGetal(antwoord);
-        });
+        SudokuWachtrij.voegNieuwAntwoordToe(this);
     }
 }
