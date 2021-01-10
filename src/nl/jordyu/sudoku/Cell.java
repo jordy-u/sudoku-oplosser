@@ -1,5 +1,6 @@
 package nl.jordyu.sudoku;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -10,6 +11,18 @@ public class Cell {
     private int aantalKandidaatGetallen = 9;
 
     private Map<CellGroep.Soort, CellGroep> celGroepen = new HashMap<>();
+
+    // Een Cell initieren, waarvan de waarde nog niet bekend is.
+    public Cell() {
+        Arrays.fill(kandidaatGetallen, true);
+    }
+
+    // Wanneer het getal al bekend is, kan deze constructor aangeroepen worden.
+    public Cell(int getal) {
+        this.getal = getal;
+        Arrays.fill(kandidaatGetallen, false);
+        aantalKandidaatGetallen = 0;
+    }
 
 
     // Haal een kandidaatgetal weg.
