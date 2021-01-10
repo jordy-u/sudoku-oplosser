@@ -48,9 +48,9 @@ public class SudokuOplosser {
     private void voegCellenToeAanGroepen() {
         // Maak groepen aan
         for (int i=0; i<9; i++) {
-            rijen[i] = new CellGroep();
-            kolommen[i] = new CellGroep();
-            blokken[i] = new CellGroep();
+            rijen[i] = new CellGroep(CellGroep.Soort.RIJ);
+            kolommen[i] = new CellGroep(CellGroep.Soort.KOLOM);
+            blokken[i] = new CellGroep(CellGroep.Soort.BLOK);
         }
 
         // Zorg dat de cellen in de juiste rijen, kolommen en 3x3-blokken komen.

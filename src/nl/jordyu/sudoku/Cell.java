@@ -72,6 +72,10 @@ public class Cell {
         Arrays.fill(kandidaatAntwoorden, false);
         aantalKandidaatGetallen = 0;
 
+        for (Map.Entry<CellGroep.Soort, CellGroep> groepEntry : cellGroepen.entrySet()) {
+            groepEntry.getValue().antwoordOpOnbekendeCell(this);
+        }
+
         SudokuWachtrij.voegNieuwAntwoordToe(this);
     }
 }
