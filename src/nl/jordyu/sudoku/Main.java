@@ -8,7 +8,7 @@ public class Main {
 	// write your code here
         SudokuWachtrij.getInstance(); //instantiëer SudokuWachtrij
 
-        List<Cell> alleCellen = ReadSudokuFile.leesSudoku("sudoku_1ster.txt");
+        List<Cell> alleCellen = ReadSudokuFile.leesSudoku("sudoku-voorbeelden/sudoku_5ster.txt");
 
         SudokuOplosser oplosser = new SudokuOplosser(alleCellen);
 
