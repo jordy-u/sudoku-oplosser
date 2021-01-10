@@ -1,4 +1,5 @@
 Status: Finished
+
 Licence: MIT (You probbably won't use is, but if you do, the license is negotiable)
 
 # 🇳🇱 sudoku-oplosser
