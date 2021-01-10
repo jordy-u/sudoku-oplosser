@@ -26,7 +26,7 @@ public class CellGroep {
         }
     }
 
-    public boolean checkVoorUniekeKandidaatgetallenInGroep() {
+    public boolean checkVoorUniekeKandidaatAntwoordenInGroep() {
 
         boolean minstensEenNieuwAntwoord = false;
 

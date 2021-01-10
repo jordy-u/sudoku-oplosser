@@ -1,6 +1,8 @@
 package nl.jordyu.sudoku;
 
+import java.util.EnumMap;
 import java.util.List;
+import java.util.Map;
 
 public class SudokuOplosser {
 
@@ -8,11 +10,20 @@ public class SudokuOplosser {
     private final CellGroep[] rijen = new CellGroep[9];
     private final CellGroep[] kolommen = new CellGroep[9];
     private final CellGroep[] blokken = new CellGroep[9];
+    private EnumMap<CellGroep.Soort, CellGroep[]> groepen = new EnumMap<>(CellGroep.Soort.class);
 
     public SudokuOplosser(List<Cell> alleCellen) {
+        // Voeg rijen, kolommen en 3x3-blokken toe aan groepen-lijst.
+        groepen.put(CellGroep.Soort.RIJ, rijen);
+        groepen.put(CellGroep.Soort.KOLOM, kolommen);
+        groepen.put(CellGroep.Soort.BLOK, blokken);
+        
         this.alleCellen = alleCellen;
         voegCellenToeAanGroepen();
         SudokuWachtrij.updateKandidaatAntwoorden();
+        
+        // Ga alle groepen langs, tot er geen nieuwe antwoorden gevonden kunnen worden.
+        while(checkVoorUniekeKandidaatAntwoorden());
     }
 
 
@@ -63,6 +74,21 @@ public class SudokuOplosser {
     
     public CellGroep[] getRijen() {
         return rijen;
+    }
+
+    // Check of er 1 kandidaatantwoord in rij, kolom of 3x3-blok is.
+    private boolean checkVoorUniekeKandidaatAntwoorden() {
+        boolean minstensEenUpdate = false;
+
+        for (Map.Entry<CellGroep.Soort, CellGroep[]> cellGroepen : groepen.entrySet()) {
+            for (CellGroep cellGroep : cellGroepen.getValue()) {
+                if (cellGroep.checkVoorUniekeKandidaatAntwoordenInGroep()) {
+                    minstensEenUpdate = true;
+                    SudokuWachtrij.updateKandidaatAntwoorden();
+                }
+            }
+        }
+        return minstensEenUpdate;
     }
     
 }
