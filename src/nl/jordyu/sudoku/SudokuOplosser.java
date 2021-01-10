@@ -12,7 +12,7 @@ public class SudokuOplosser {
     public SudokuOplosser(List<Cell> alleCellen) {
         this.alleCellen = alleCellen;
         voegCellenToeAanGroepen();
-
+        SudokuWachtrij.updateKandidaatAntwoorden();
     }
 
 
@@ -50,11 +50,14 @@ public class SudokuOplosser {
             int kolom = i%9;
 
             rijen[rij].voegCellToeAanGroep(dezeCell);
+            dezeCell.setCelGroep(rijen[rij], CellGroep.Soort.RIJ);
+            
             kolommen[kolom].voegCellToeAanGroep(dezeCell);
-
+            dezeCell.setCelGroep(kolommen[kolom], CellGroep.Soort.KOLOM);
 
             int blokId = rij/3*3 + kolom/3;
             blokken[blokId].voegCellToeAanGroep(dezeCell);
+            dezeCell.setCelGroep(blokken[blokId], CellGroep.Soort.BLOK);
         }
     }
 }

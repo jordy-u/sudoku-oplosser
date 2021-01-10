@@ -26,11 +26,11 @@ public final class SudokuWachtrij
         INSTANCE.nieuweCellenMetAntwoorden.add(cell);
     }
 
-    public void updateKandidaatAntwoorden() {
+    public static void updateKandidaatAntwoorden() {
         // Update 1-voor-1 alle cellen met antwoorden.
         // In deze while loop kunnen tussendoor nieuwe cellen-met-antwoorden worden toegevoegd.
-        while (!nieuweCellenMetAntwoorden.isEmpty()) {
-            Cell cellMetNieuwAntwoord = nieuweCellenMetAntwoorden.remove(0);
+        while (! INSTANCE.nieuweCellenMetAntwoorden.isEmpty()) {
+            Cell cellMetNieuwAntwoord = INSTANCE.nieuweCellenMetAntwoorden.remove(0);
             cellMetNieuwAntwoord.updateGroepen();
         }
     }
