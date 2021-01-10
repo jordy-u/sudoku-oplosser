@@ -60,4 +60,9 @@ public class SudokuOplosser {
             dezeCell.setCelGroep(blokken[blokId], CellGroep.Soort.BLOK);
         }
     }
+    
+    public CellGroep[] getRijen() {
+        return rijen;
+    }
+    
 }

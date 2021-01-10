@@ -61,5 +61,8 @@ public class CellGroep {
         }
     }
 
+    public Cell[] getCellen() {
+        return cellen;
+    }
 
 }
