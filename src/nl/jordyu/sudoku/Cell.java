@@ -1,14 +1,13 @@
 package nl.jordyu.sudoku;
 
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 public class Cell {
 
     private int antwoord = 0; //0 = antwoord onbekend.
     private boolean[] kandidaatAntwoorden = new boolean[10]; //Getalmogelijkheden 1 tot 9
     private int aantalKandidaatGetallen = 9;
+    private int kleinsteBehandeldeNakedXGroepGrootte = 9;
 
     private Map<CellGroep.Soort, CellGroep> cellGroepen = new HashMap<>();
 
@@ -20,6 +19,26 @@ public class Cell {
     // Wanneer het getal al bekend is, kan deze constructor aangeroepen worden.
     public Cell(int antwoord) {
         setAntwoord(antwoord);
+    }
+
+    public int getAantalKandidaatGetallen() {
+        return aantalKandidaatGetallen;
+    }
+
+    public int getKleinsteBehandeldeNakedXGroepGrootte() {
+        return kleinsteBehandeldeNakedXGroepGrootte;
+    }
+
+    public void setKleinsteBehandeldeNakedXGroepGrootte(int kleinsteBehandeldeNakedXGroepGrootte) {
+        this.kleinsteBehandeldeNakedXGroepGrootte = kleinsteBehandeldeNakedXGroepGrootte;
+    }
+
+    public List<Integer> getKandidaatGetallen() {
+        List<Integer> kandidaatGetallen = new ArrayList<>();
+        for (int i=1; i<10; i++) {
+            if (kandidaatAntwoorden[i]) kandidaatGetallen.add(i);
+        }
+        return kandidaatGetallen;
     }
 
     // Haal een kandidaatgetal weg.
@@ -77,5 +96,10 @@ public class Cell {
         }
 
         SudokuWachtrij.voegNieuwAntwoordToe(this);
+    }
+
+    public boolean nakedXMatch(Cell andereCell) {
+        if (this.aantalKandidaatGetallen != andereCell.aantalKandidaatGetallen) return false;
+        return Arrays.equals(this.kandidaatAntwoorden, andereCell.kandidaatAntwoorden);
     }
 }

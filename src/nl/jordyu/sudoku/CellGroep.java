@@ -57,6 +57,7 @@ public class CellGroep {
                 minstensEenNieuwAntwoord = true;
             } else {
                 behandelKandidaatAntwoordenInZelfdeSubgroep(kandidaatCellenInSubgroep, kandidaatAntwoord);
+                if (behandelNakedXInGroep()) minstensEenNieuwAntwoord = true;
             }
 
         }
@@ -69,13 +70,27 @@ public class CellGroep {
         onbekendeCellen.forEach((id, cell) -> cell.haalKandidaatAntwoordWeg(antwoord));
     }
 
-    // Wanneer een antwoord in een bepaalde subgroep MOET zitten, dan zit hij niet in de andere subgroepen.
+    // Wanneer een antwoord in een bepaalde (sub)groep MOET zitten, dan zit hij niet in de andere subgroepen.
     // Haal de kandidaat-antwoorden uit die andere subgroepen.
     public void verwijderKandidaatGetal(int antwoord, Map<Integer, Cell> uitzonderingCellen) {
-        //todo checken
+        verwijderKandidaatGetal(
+                antwoord,
+                new ArrayList<Cell>(uitzonderingCellen.values())
+        );
+    }
+
+    // Wanneer een antwoord in een bepaalde (sub)groep MOET zitten, dan zit hij niet in de andere subgroepen.
+    // Haal de kandidaat-antwoorden uit die andere subgroepen.
+    public void verwijderKandidaatGetal(int antwoord, List<Cell> uitzonderingCellen) {
         onbekendeCellen.forEach((id, cell) -> {
-            if (!uitzonderingCellen.containsValue(cell))
+            if (!uitzonderingCellen.contains(cell))
                 cell.haalKandidaatAntwoordWeg(antwoord);
+        });
+    }
+
+    public void verwijderKandidaatGetallen(List<Integer> antwoorden, List<Cell> uitzonderingCellen) {
+        antwoorden.forEach((antwoord) -> {
+            verwijderKandidaatGetal(antwoord, uitzonderingCellen);
         });
     }
 
@@ -173,5 +188,51 @@ public class CellGroep {
 
     public List<Cell> toCellList() {
         return Arrays.asList(cellen);
+    }
+
+    /* "Naked X" staat voor "Naked double", "Naked triple", enzovoort.
+
+    Naked double: 2 cellen in dezelfde groep hebben beiden maar 2 kandidaat-antwoorden, welke overeenkomen met de andere cell.
+    Hierdoor kan uitgesloten worden dat deze kandidaat-antwoorden voorkomen in de andere cellen van dezelfde groep.
+
+    Deze methode kan ook voor 3 (triple) of meer worden cellen per groep worden toegepast.
+     */
+    public boolean behandelNakedXInGroep() {
+
+        // Sorteer de onbekende cellen. De index geef aan hoeveel kandidaat-antwoorden de cellen in de lijst heeft.
+        List<Cell>[] onbekendeCellenMetAantalKandidaatAntwoorden = new ArrayList[9];
+        for (int i=0; i<9; i++) onbekendeCellenMetAantalKandidaatAntwoorden[i] = new ArrayList<Cell>();
+
+        for (Map.Entry<Integer, Cell> cell : onbekendeCellen.entrySet()) {
+            onbekendeCellenMetAantalKandidaatAntwoorden[cell.getValue().getAantalKandidaatGetallen()].add(cell.getValue());
+        }
+
+        for (int i=2; i<9; i++) {
+            List<ArrayList<Cell>> gecheckteCellen = new ArrayList<ArrayList<Cell>>();
+
+            for (Cell cell : onbekendeCellenMetAantalKandidaatAntwoorden[i]) {
+                for (ArrayList<Cell> cellLijst : gecheckteCellen) {
+                    Cell randomCellUitCellLijst = cellLijst.get(0);
+                    // Het heeft geen zin om cellen te behandelen die al behandeld zijn met de huidige NakexXGroepGrootte.
+                    if (randomCellUitCellLijst.getKleinsteBehandeldeNakedXGroepGrootte() <= i) continue;
+
+                    if (cell.nakedXMatch(randomCellUitCellLijst)) {
+                        cellLijst.add(cell);
+                        if (cellLijst.size() == i) {
+                            verwijderKandidaatGetallen(cell.getKandidaatGetallen(), cellLijst);
+
+                            for (Cell c : cellLijst) c.setKleinsteBehandeldeNakedXGroepGrootte(i);
+                            return true;
+                        }
+                        break;
+                    }
+                }
+                ArrayList<Cell> nieuweGecheckteCellLijst = new ArrayList<>();
+                nieuweGecheckteCellLijst.add(cell);
+                gecheckteCellen.add(nieuweGecheckteCellLijst);
+            }
+
+        }
+        return false;
     }
 }
