@@ -16,7 +16,7 @@ public class Main {
         SudokuOplosser oplosser = new SudokuOplosser(alleCellen);
 
         System.out.println("Programma afgelopen.");
-        printSudokuResultaat(oplosser.getRijen(), null);
+        printSudokuResultaat(oplosser.getRijen());
 
     }
 

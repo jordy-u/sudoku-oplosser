@@ -22,7 +22,7 @@ public class SudokuOplosser {
         voegCellenToeAanGroepen();
         SudokuWachtrij.updateKandidaatAntwoorden();
 
-        Main.printSudokuResultaat(rijen, null);
+        Main.printSudokuResultaat(rijen);
         
         // Ga alle groepen langs, tot er geen nieuwe antwoorden gevonden kunnen worden.
         while(checkVoorUniekeKandidaatAntwoorden());
