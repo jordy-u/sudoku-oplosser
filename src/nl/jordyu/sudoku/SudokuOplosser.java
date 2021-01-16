@@ -21,6 +21,8 @@ public class SudokuOplosser {
         this.alleCellen = alleCellen;
         voegCellenToeAanGroepen();
         SudokuWachtrij.updateKandidaatAntwoorden();
+
+        Main.printSudokuResultaat(rijen, null);
         
         // Ga alle groepen langs, tot er geen nieuwe antwoorden gevonden kunnen worden.
         while(checkVoorUniekeKandidaatAntwoorden());
