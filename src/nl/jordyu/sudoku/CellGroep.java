@@ -23,11 +23,12 @@ public class CellGroep {
     }
 
     public void voegCellToeAanGroep(Cell cell) {
-        cellen[aantalCellenToegevoegd++] = cell;
+        cellen[aantalCellenToegevoegd] = cell;
 
         if (!cell.isBekend()) {
             onbekendeCellen.put(aantalCellenToegevoegd, cell);
         }
+        aantalCellenToegevoegd++;
     }
 
     public boolean checkVoorUniekeKandidaatAntwoordenInGroep() {
@@ -71,6 +72,7 @@ public class CellGroep {
     // Wanneer een antwoord in een bepaalde subgroep MOET zitten, dan zit hij niet in de andere subgroepen.
     // Haal de kandidaat-antwoorden uit die andere subgroepen.
     public void verwijderKandidaatGetal(int antwoord, Map<Integer, Cell> uitzonderingCellen) {
+        //todo checken
         onbekendeCellen.forEach((id, cell) -> {
             if (!uitzonderingCellen.containsValue(cell))
                 cell.haalKandidaatAntwoordWeg(antwoord);
@@ -103,20 +105,20 @@ public class CellGroep {
     private void behandelKandidaatAntwoordenInZelfdeSubgroep(Map<Integer, Cell> cellen, int antwoordKandidaat) {
         // Horizontaal
         if (soort == Soort.RIJ || soort == Soort.BLOK) {
-            int subgroepId = 0;
+            int subgroepId = -1;
             for (Map.Entry<Integer, Cell> cell : cellen.entrySet()) {
-                if (subgroepId == 0) {
-                    subgroepId = cell.getKey();
+                if (subgroepId == -1) {
+                    subgroepId = getSubgroepByCellIdHorizontaal(cell.getKey());
                 } else {
                     if (subgroepId != getSubgroepByCellIdHorizontaal(cell.getKey())) {
                         // Kandidaatgetal behoort tot meerdere subgroepen.
-                        subgroepId = 0;
+                        subgroepId = -1;
                         break;
                     }
                 }
             }
 
-            if (subgroepId != 0) {
+            if (subgroepId != -1) {
                 Cell willekeurigeCellInSubgroep = cellen.entrySet().iterator().next().getValue();
                 if (soort == Soort.RIJ)
                     willekeurigeCellInSubgroep.getCelGroep(Soort.BLOK).verwijderKandidaatGetal(antwoordKandidaat, cellen);
@@ -127,20 +129,20 @@ public class CellGroep {
 
         // Verticaal
         if (soort == Soort.KOLOM || soort == Soort.BLOK) {
-            int subgroepId = 0;
+            int subgroepId = -1;
             for (Map.Entry<Integer, Cell> cell : cellen.entrySet()) {
-                if (subgroepId == 0) {
-                    subgroepId = cell.getKey();
+                if (subgroepId == -1) {
+                    subgroepId = getSubgroepByCellIdVerticaal(cell.getKey());
                 } else {
                     if (subgroepId != getSubgroepByCellIdVerticaal(cell.getKey())) {
                         // Kandidaatgetal behoort tot meerdere subgroepen.
-                        subgroepId = 0;
+                        subgroepId = -1;
                         break;
                     }
                 }
             }
 
-            if (subgroepId != 0) {
+            if (subgroepId != -1) {
                 Cell willekeurigeCellInSubgroep = cellen.entrySet().iterator().next().getValue();
                 if (soort == Soort.KOLOM)
                     willekeurigeCellInSubgroep.getCelGroep(Soort.BLOK).verwijderKandidaatGetal(antwoordKandidaat, cellen);
@@ -150,11 +152,13 @@ public class CellGroep {
         }
     }
 
-    private int getSubgroepByCellIdHorizontaal(int cellId) {
+    public int getSubgroepByCellIdHorizontaal(int cellId) {
+        if (soort == Soort.KOLOM) throw new RuntimeException("getSubgroepByCellIdHorizontaal aangeroepen voor kolom");
         return cellId / 3;
     }
 
-    private int getSubgroepByCellIdVerticaal(int cellId) {
+    public int getSubgroepByCellIdVerticaal(int cellId) {
+        if (soort == Soort.RIJ) throw new RuntimeException("getSubgroepByCellIdVerticaal aangeroepen voor rij");
         if (soort == Soort.KOLOM)
             return cellId / 3;
         else //BLOK
@@ -165,5 +169,9 @@ public class CellGroep {
         if (onbekendeCellen.containsValue(cell)) {
             bekendeGetallen[cell.getAntwoord()] = true;
         }
+    }
+
+    public List<Cell> toCellList() {
+        return Arrays.asList(cellen);
     }
 }

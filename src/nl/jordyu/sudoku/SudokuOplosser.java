@@ -88,6 +88,8 @@ public class SudokuOplosser {
                     minstensEenUpdate = true;
                     SudokuWachtrij.updateKandidaatAntwoorden();
                 }
+                System.out.println("-------------------");
+                Main.printSudokuResultaat(rijen, cellGroep.toCellList());
             }
         }
         return minstensEenUpdate;
